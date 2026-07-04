@@ -120,7 +120,7 @@ export const deleteComment = async (id: string) => {
 };
 
 export const getCommentById = async (id: string) => {
-  return await db.query.comments.findMany({
+  return await db.query.comments.findFirst({
     where: eq(comments.id, id),
     with: { user: true },
   });
