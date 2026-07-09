@@ -12,7 +12,7 @@ export const getAllProducts = async () => {
 };
 
 export const getProductById = async (id) => {
-  const { data } = await apit.get(`/products/${id}`);
+  const { data } = await api.get(`/products/${id}`);
   return data;
 };
 
@@ -38,7 +38,7 @@ export const deleteProduct = async (id) => {
 
 //comments api
 export const createComment = async ({ productId, content }) => {
-  const { data } = await api.post(`/comments/${productId}`, content);
+  const { data } = await api.post(`/comments/${productId}`, { content });
   return data;
 };
 

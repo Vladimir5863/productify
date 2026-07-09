@@ -4,7 +4,7 @@ import { getAuth } from "@clerk/express";
 
 export const createComment = async (req: Request, res: Response) => {
   try {
-    const userId = getAuth(req);
+    const { userId } = getAuth(req);
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
     const { productId } = req.params;
@@ -29,19 +29,18 @@ export const createComment = async (req: Request, res: Response) => {
 
 export const deleteComment = async (req: Request, res: Response) => {
   try {
-    const userId = getAuth(req);
+    const { userId } = getAuth(req);
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-    const { productId } = req.params;
-    const { commentId } = req.body;
+    const { commentId } = req.params;
+
+    if (typeof commentId !== "string") {
+      return res.status(400).json({ error: "Invalid id" });
+    }
+
     if (typeof userId !== "string") {
       return res.status(400).json({ error: "Invalid id" });
     }
-    if (typeof productId !== "string") {
-      return res.status(400).json({ error: "Invalid id" });
-    }
-    const product = await queries.getProductById(productId);
-    if (!product) return res.status(404).json({ error: "Product not found" });
 
     const comment = await queries.getCommentById(commentId);
     if (!comment) return res.status(404).json({ error: "Comment not found" });

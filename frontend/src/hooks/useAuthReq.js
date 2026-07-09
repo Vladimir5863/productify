@@ -2,8 +2,11 @@ import { useAuth } from "@clerk/clerk-react";
 import { useEffect } from "react";
 import api from "./../lib/axios";
 
+let isInterceptorRegistered = false;
+
 function useAuthReq() {
   const { isSignedIn, getToken, isLoaded } = useAuth();
+
   useEffect(() => {
     const interceptor = api.interceptors.request.use(async (config) => {
       if (isSignedIn) {
@@ -14,7 +17,10 @@ function useAuthReq() {
       }
       return config;
     });
-    return () => api.interceptors.request.eject(interceptor);
+
+    return () => {
+      api.interceptors.request.eject(interceptor);
+    };
   }, [isSignedIn, getToken]);
 
   return { isSignedIn: isSignedIn, isClerkLoaded: isLoaded };
